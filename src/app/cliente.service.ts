@@ -20,9 +20,9 @@ export class ClienteService {
     return this.clientes;
   }
 
-  buscarPorId(id: number): Cliente {
+  buscarPorId(id: number): Cliente | null{
     const cliente = this.clientes.find(cliente => cliente.id == id);
-    return cliente ? Object.assign({}, cliente) : new Cliente() ;
+    return cliente ? Object.assign({}, cliente) : null ;
   }
 
   editar(id: number, cliente: Cliente) {
