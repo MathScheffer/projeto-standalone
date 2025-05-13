@@ -8,40 +8,39 @@ import { Cliente } from '../cliente';
 @Component({
   selector: 'app-form-cliente',
   standalone: true,
-  imports: [JsonPipe, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   template: `
-  <div class="container">
-    <div>
-    <form [formGroup]="clientForm" (ngSubmit)="salvar()">
-    <div class="mb-3">
+  <div class="container d-flex justify-content-center">
+    <form [formGroup]="clientForm" (ngSubmit)="salvar()" class="container d-flex justify-content-center flex-column">
+    <div class="mb-3 row">
       <label class="form-label">
         Name
         <input class="form-control"type="text" formControlName="nome" />
       </label>
     </div>
-    <div class="mb-3">
+    <div class="mb-3 row">
       <label class="form-label">
         Email
         <input class="form-control" type="text" formControlName="email" />
       </label>
     </div>
-    <div class="mb-3">
+    <div class="mb-3 row">
             <label class="form-label">
         Telefone
         <input class="form-control"  type="text" formControlName="telefone" />
       </label>
     </div>
-    <div class="mb-3">
+    <div class="mb-3 row">
             <label class="form-label">
         Data de Nascimento
         <input class="form-control" type="date" formControlName="dataNascimento" />
       </label>
     </div>
-      <button class="btn btn-primary me-3" type="submit" (click)="handleSubmit($event)">{{botaoAcao}}</button>
-            <button class="btn btn-primary me-3" type="submit" (click)="irTabela()">Ir para Tabela</button>
-    </form>
+    <div class="mb-3 row justify-content-between">
+      <button class="col-5 btn btn-primary me-3" type="submit" (click)="handleSubmit($event)">Salvar</button>
+            <button class="col-5 btn btn-primary me-3" type="submit" (click)="irTabela()">Ir para Tabela</button>
     </div>
-    <p>{{ clientForm.value.nome | json}}</p>
+    </form>
     </div>
   `,
 })
@@ -54,7 +53,6 @@ export class FormClienteComponent {
   })
 
   id?: number;
-  botaoAcao?: string = "Salvar";
   cliente: Cliente = new Cliente();
   listaClientes: Cliente[];
   constructor(private clienteService: ClienteService
@@ -67,7 +65,6 @@ export class FormClienteComponent {
 
       if(this.id){
         
-        this.botaoAcao = "Editar";
         this.cliente = clienteService.buscarPorId(this.id);
         
         this.clientForm.controls.nome.setValue(this.cliente?.nome??"");
@@ -87,9 +84,6 @@ export class FormClienteComponent {
   }
   salvar = () => {
     if(this.id){
-      
-      this.botaoAcao = "Editar";
-
       let clientObj = {id: this.id,...this.clientForm.value};
       console.log(`Editando: ${JSON.stringify(clientObj)}`)
 
@@ -101,8 +95,6 @@ export class FormClienteComponent {
     //this.clienteService.addCliente(this.clientForm.value)
  
   else{
-    
-    this.botaoAcao = "Salvar";
     if (this.clientForm.value.nome){
 
       const id = (this.listaClientes[this.listaClientes.length - 1]?.id ?? 0) + 1;
